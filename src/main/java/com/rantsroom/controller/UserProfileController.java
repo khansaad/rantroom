@@ -94,8 +94,8 @@ public class UserProfileController {
 			User user = userService.findByUsername(principal.getName());//userService.findById(Id).get();
 			updateUser(user, userForm);			
 			userService.save(user);
-			
-			model.addAttribute("profileUpdated", "Your profile is updated succesfully");
+			String profileUpdated = "Your profile is updated succesfully";
+			model.addAttribute("profileUpdated",profileUpdated);
 			model.addAttribute("user", user);
 			List<Post> posts = postServiceImpl.findAllById(user.getId());
 	    	if(posts.isEmpty())
