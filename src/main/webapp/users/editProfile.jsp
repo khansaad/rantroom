@@ -129,41 +129,50 @@
 			  	<hr>
 				<div class="row">
 			      <!-- left column --> 
-			      <div class="col-md-3">
-			      <img src="${contextPath}/resources/images/no-dp-boy.jpg" class="avatar img-circle" alt="avatar" height="150" width="150">
-			      	<form action="myform.cgi">
-				      	<label> Update your Profile photo</label> 
-			      		<!-- <input type="file" name="fileupload" value="fileupload" id="fileupload"> -->
-			      		<input type="file" class="custom-file-input" value="fileupload">
-				      	<input type="submit" value="Upload" class="custom-file-input" style="margin-top: 12px"> 
-			      	</form>
-
-			        <%-- <div class="text-center">
-			          <img src="${contextPath}/resources/images/no-dp-boy.jpg" class="avatar img-circle" alt="avatar" height="150" width="150">
-			          <h6>Change Avatar</h6>
-			          
-			          <input type="file" class="form-control">
-			        </div> --%>
+			      <div class="col-md-3">			      	 
+					<div>
+						<label> Update your Profile photo</label><br>				
+					    <c:choose>
+					    	<c:when test="${upload_status!=null}">
+					    		<c:choose>
+					    			<c:when test="${filename!=null}">
+					    				<span style="color: green;">${upload_status}</span><br>
+					    				<img src="${contextPath}/uploads/${filename}" class="avatar img-circle" alt="avatar" height="150" width="150"><br><br>
+					    			</c:when>
+					    			<c:otherwise>
+					    				<img src="${contextPath}/uploads/${userForm.getUserProfile().getFileName()}" class="avatar img-circle" alt="avatar" height="150" width="150"><br><br>
+					    				<span style="color: red;">${upload_status}</span>
+					    			</c:otherwise>
+					    		</c:choose>			    		
+					    	</c:when>
+					    	<c:otherwise>
+					    		<c:choose>
+					    			<c:when test="${userForm.getUserProfile().getFileName()!=null}">
+					    				<img src="${contextPath}/uploads/${userForm.getUserProfile().getFileName()}" class="avatar img-circle" alt="avatar" height="150" width="150"><br><br>
+					    			</c:when>
+					    			<c:otherwise>
+							    		<img src="${contextPath}/resources/images/no-dp-boy.jpg" class="avatar img-circle" alt="avatar" height="150" width="150"><br><br>					    			
+					    			</c:otherwise>
+					    		</c:choose>
+					    	</c:otherwise>
+					    </c:choose>
+				      	<form:form method="POST" action="/uploadphoto" enctype="multipart/form-data">				      		
+						    <!-- <input type="file" name="profilePhoto" /><br/> -->		      
+                            <input type="file" name="profilePhoto"></input><br/>
+						    <input type="submit" value="Submit" />
+						</form:form>
+					</div>				      	
 			      </div>
 			      
 			      <!-- edit form column -->
-			      <div class="col-md-9 personal-info">
-			        <!-- <div class="alert alert-info alert-dismissable">
-			          <a class="panel-close close" data-dismiss="alert">×</a> 
-			          <i class="fa fa-coffee"></i>
-			          This is an <strong>.alert</strong>. Use this to show important messages to the user.
-			        </div> -->
+			      <div class="col-md-9 personal-info">			        
 			        <h3>Personal info</h3>
-			        <%-- <div class="col-sm-3 col-sm-offset-3 menu">
-                        <p style="font-weight: 700"><a href="${contextPath}/users/profile">Cancel</a></p>
-                    </div> --%>
-			        
                     <form:form method="POST" modelAttribute="userForm" class="form-horizontal">
                         <div class="form-group">
                             <label class="col-lg-3 control-label">USERNAME:</label>
                             <spring:bind path="username">                       
 	                            <div class="col-lg-8 form-group">
-	                                <input type="text" value="${userForm.getUsername()}" class="form-control" readonly></input>                                            
+	                                <form:input type="text" path="username" value="${userForm.getUsername()}" class="form-control" readonly="true"></form:input>                                            
 	                            </div>
                        		</spring:bind>
                         </div>
@@ -188,7 +197,7 @@
                             <label class="col-lg-3 control-label">EMAIL:</label>
                             <spring:bind path="email">                        
 	                            <div class="col-lg-8 form-group">
-	                                <input type="text" value="${userForm.getEmail()}" class="form-control" 	readonly></input>                                            
+	                                <form:input type="text" path="email" value="${userForm.getEmail()}" class="form-control" readonly="true"></form:input>                                            
 	                            </div>
                    			</spring:bind>
                         </div>

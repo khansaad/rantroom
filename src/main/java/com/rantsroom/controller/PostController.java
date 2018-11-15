@@ -45,9 +45,6 @@ public class PostController {
     @Autowired
     private PostValidator postValidator;
     
-    @Autowired
-    private SecurityService securityService;
-     
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     public String createPost(Model model, Principal principal) {//, @AuthenticationPrincipal UserDetails currentUser) {
     	

@@ -2,6 +2,9 @@ package com.rantsroom.model;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +25,8 @@ public class User extends AuditModel{
     private boolean email_confirmed;
     private String confirmationToken;
     
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OnDelete(action=OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Post> posts;
     
     @ManyToMany(cascade = CascadeType.ALL)

@@ -126,9 +126,16 @@
 	        <c:choose>
 	          <c:when test="${info == null}">
 	            <div class="container" id="sub-content">
-	                <div class="row clearfix profile">
+	                <div class="row clearfix profile">	                	
 	                    <div class="col-sm-4" style="margin:14px 0">  
-							<img src="${contextPath}/resources/images/no-dp-boy.jpg" height="150" width="150" alt="Upload image">
+							<c:choose>
+						    	<c:when test="${user.getUserProfile().getFileName()!=null}">
+					    			<img src="${contextPath}/uploads/${user.getUserProfile().getFileName()}" class="avatar img-circle" alt="avatar" height="150" width="150">						    		
+						    	</c:when>
+						    	<c:otherwise>
+						    		<img src="${contextPath}/resources/images/no-dp-boy.jpg" class="avatar img-circle" alt="avatar" height="150" width="150">
+						    	</c:otherwise>
+					    	</c:choose>
 	                    </div>
 	                    <c:choose>
 	          				<c:when test="${profileUpdated == null}">
@@ -154,7 +161,7 @@
 	                    <div class="col-sm-4">
 	                        <ul class="nav navbar-nav navbar-right menu menu-right">
 	                            <li><a href="${contextPath}/users/post" class="btn">Create Rant</a></li>
-	                            <li><a href = "${contextPath}/users/editProfile/${user.getId()}" class="btn">Edit Profile</a></li>
+	                            <li><a href = "${contextPath}/users/editProfile" class="btn">Edit Profile</a></li>
 	                        </ul>
 	                    </div>    
 	                </div>    

@@ -1,12 +1,16 @@
 package com.rantsroom.controller;
 
+import java.awt.image.RescaleOp;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,19 +34,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rantsroom.model.Post;
 import com.rantsroom.model.User;
+import com.rantsroom.model.UserProfile;
 import com.rantsroom.service.PostServiceImpl;
+import com.rantsroom.service.UserProfileService;
+import com.rantsroom.service.UserProfileServiceImpl;
 import com.rantsroom.service.UserService;
 import com.rantsroom.validator.FormValidator;
 import com.rantsroom.validator.UserValidator;
 
 @Controller
-public class UserProfileController {
-	
-	@Value("${file.upload-dir}")
-	private String uploadFolderPath;
-	@Value("${server.address}")
-	private String serverAddress;
-	
+public class UserProfileController {	
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
@@ -51,21 +52,16 @@ public class UserProfileController {
     private PostServiceImpl postServiceImpl;
     @Autowired
     private UserValidator userValidator;
+    @Autowired
+    private UserProfileService userProfileService;
+    
   //Save the uploaded file to this folder
-    //private static String UPLOADED_FOLDER = "./upload";
+    public static String UPLOADED_FOLDER = System.getProperty("user.dir") + "\\src\\main\\webapp\\uploads";
     
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
-    public String welcome(Model model, Principal principal) {
+    public String welcome(Model model, Principal principal) {    	
     	
-    	System.out.println("UPLOAD_FOLDER_PATH: "+uploadFolderPath);
-		String currentUser = null;
-    	try {
-			currentUser = principal.getName();
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-    	} catch (NullPointerException e) {
-			logger.info("No user logged in");
-		}
-    	User user = userService.findByUsername(currentUser);
+    	User user = userService.findByUsername(principal.getName());
     	model.addAttribute("user", user);
     	List<Post> posts = postServiceImpl.findAllById(user.getId());
     	if(posts.isEmpty())
@@ -76,49 +72,90 @@ public class UserProfileController {
     }
     
 	
-	@RequestMapping(value = "/users/editProfile/{id}", method = RequestMethod.GET)
-    public String editProfile(@PathVariable("id") Long id, Model model) {
+	@RequestMapping(value = "/users/editProfile", method = RequestMethod.GET)
+    public String editProfile(Model model,Principal principal) {
 		
-		logger.info("User object based on id "+id+" : \n"+userService.findById(id).get().toString());
-		model.addAttribute("userForm", userService.findById(id).get());
-	   
+		User user = userService.findByUsername(principal.getName());
+		model.addAttribute("userForm",user );
+		model.addAttribute("userProfileForm", new UserProfile());
 		return "users/editProfile";
     }
-	@RequestMapping(value = "/users/editProfile/{id}", method = RequestMethod.POST)
-    public String editProfile(@PathVariable("id") Long id, @ModelAttribute("userForm") User userForm,
-    		BindingResult bindingResult, Model model, HttpServletRequest request) {
+	
+	@RequestMapping(value = "/users/editProfile", method = RequestMethod.POST)
+    public String editProfile(@ModelAttribute("userForm") User userForm,
+    		BindingResult bindingResult, Model model, HttpServletRequest request, Principal principal) {		
 		
-		/*userValidator.validate(userForm, bindingResult);
+		userValidator.validateUpdate(userForm, bindingResult);
 		if (bindingResult.hasErrors()) {
             return "users/editProfile";
         }
-		else {*/
+		else {
 			
-			logger.info("USER Form : ",userForm.toString());
-			userService.save(userForm);
+			User user = userService.findByUsername(principal.getName());//userService.findById(Id).get();
+			updateUser(user, userForm);			
+			userService.save(user);
+			
 			model.addAttribute("profileUpdated", "Your profile is updated succesfully");
-			return "users/profile";
-		//}
-		
-		
-		/*
-		String currentUser = null;
-		try {
-			currentUser = principal.getName();
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-		} catch (NullPointerException e) {
-			logger.info("No user logged in");
-		}
-		User user = userService.findByUsername(currentUser);
-		model.addAttribute("user", user);
-		model.addAttribute("info", "This part is under construction. Please check back later.");
-    	User user = userService.findByUsername(currentUser.getUsername());
-    	model.addAttribute("user", user);
-    	List<Post> posts = postServiceImpl.findAllById(user.getId());
-    	model.addAttribute("posts", posts);*/
-		
+			model.addAttribute("user", user);
+			List<Post> posts = postServiceImpl.findAllById(user.getId());
+	    	if(posts.isEmpty())
+	    		logger.info("No posts found");
+			model.addAttribute("posts", posts);
+			
+			return "redirect:/users/profile";
+		}		
 	}
 	
+
+	@RequestMapping(value = "/uploadphoto", method = RequestMethod.POST)
+    public String profilePhotoUpload(@RequestParam("profilePhoto") MultipartFile file,
+                                   RedirectAttributes redirectAttributes, Model model, Principal principal, UserProfile userProfileForm) {
+		
+		User user = userService.findByUsername(principal.getName());
+		if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("upload_status", "Please select a file to upload");
+            model.addAttribute("userForm", user);
+            return "redirect:users/editProfile";
+        }
+		if(!file.getContentType().equals("image/jpeg")) {
+			redirectAttributes.addFlashAttribute("upload_status", "Invalid file selected. Please select a JPG/PNG File");
+            model.addAttribute("userForm", user);
+            return "redirect:users/editProfile";
+		}
+		try {
+				logger.info("UPLOADED FILE TYPE: "+file.getContentType());
+				
+				// Get the file and save it somewhere
+				String arr[] = file.getOriginalFilename().split("\\.");
+				String fileName = principal.getName() +"_"+ LocalDate.now()+"."+arr[arr.length-1];
+				
+				byte[] bytes = file.getBytes();            
+				Path path = Paths.get(UPLOADED_FOLDER+"\\"+fileName);            
+				Files.write(path, bytes,StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING );
+				
+				try {
+					UserProfile userProfile = user.getUserProfile();
+					//userProfile.getUser().setUserProfile(userProfileForm);
+					userProfile.setFileName(fileName);
+					userProfileService.save(userProfile);
+				} catch (NullPointerException e) {
+					logger.error("No user profile found");
+					userProfileForm.setFileName(fileName);
+					userProfileForm.setUser(user);
+					userProfileService.save(userProfileForm);			
+				} 
+				
+				redirectAttributes.addFlashAttribute("upload_status","Photo uploaded successfully");
+				redirectAttributes.addFlashAttribute("filename",fileName);				
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			model.addAttribute("userForm", userService.findByUsername(principal.getName()));
+			return "redirect:users/editProfile";
+		
+    }
+
 	@RequestMapping(value = "/users/profile/settings", method = RequestMethod.GET)
 	public String profileSettings(Model model,Principal principal) {
 		
@@ -135,14 +172,47 @@ public class UserProfileController {
 		
 		return "users/profile";
 	}
+	
+	private void updateUser(User user, User userForm) {
+		
+		user.setFirstname(userForm.getFirstname());
+		user.setLastname(userForm.getLastname());
+		user.setPassword(userForm.getPassword());
+		user.setPasswordConfirm(userForm.getPassword());
+	}
+	
+	
 }
 
 
+/*public String getPath() throws UnsupportedEncodingException {
+public static void main(String[] args) throws UnsupportedEncodingException {
+	
+	LocalDate today = LocalDate.now();
+	System.out.println(today);
+}
 
+			String path = this.getClass().getClassLoader().getResource("").getPath();
 
+			String fullPath = URLDecoder.decode(path, "UTF-8");
 
+			String pathArr[] = fullPath.split("/src/main/webapp/uploads");
+			
+			System.out.println(fullPath);
 
+			System.out.println(pathArr[0]);
 
+			fullPath = pathArr[0];
+
+			String reponsePath = System.getProperty("user.dir") + "\\src\\main\\webapp\\uploads";
+			System.out.println(reponsePath);
+
+			// to read a file from webcontent
+
+			reponsePath = new File(fullPath).getPath() + File.separatorChar + "newfile.txt";
+			return reponsePath;
+
+			}*/
 
 /*String currentUser = null;
     	try {
