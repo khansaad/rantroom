@@ -95,12 +95,12 @@
                                     				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 				</form>
 	                                            <li class="dropdown">
-                                          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">${user}<span class="caret"></span></a>
-                                            			<ul class="dropdown-menu sublist" role="menu">
-		                                                    <li><a href="${contextPath}/users/profile">Profile</a></li>		                                                    
-		                                                    <li><a href="${contextPath}/users/profile/settings">Settings</a></li>
-		                                                    <li><a onclick="document.forms['logoutForm'].submit()">Logout</a></li> 
-                                            			</ul>
+                                          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">${user.getUsername()}<span class="caret"></span></a>
+                                           			<ul class="dropdown-menu sublist" role="menu">
+	                                                    <li><a href="${contextPath}/users/profile">Profile</a></li>		                                                    
+	                                                    <li><a href="${contextPath}/users/profile/settings">Settings</a></li>
+	                                                    <li><a onclick="document.forms['logoutForm'].submit()">Logout</a></li> 
+                                           			</ul>
                                         		</li>  	                                            
                                         	</c:when>
                                         	<c:otherwise>
@@ -162,13 +162,22 @@
                     <c:otherwise>
                         <div class="row">
                             <div class="col-sm-6">
-                                <h3><a style="text-align: left;font-size: 16px" href="${contextPath}/users/profile" > &lt;&lt;Back</a></h3>
+                            	<c:choose>
+                            		<c:when test="${user != null}">
+		                                <h3><a style="text-align: left;font-size: 16px" href="${contextPath}/users/profile" > &lt;&lt;Back</a></h3>                            			
+                            		</c:when>
+                            		<c:otherwise>
+                            			<h3><a style="text-align: left;font-size: 16px" href="${contextPath}/home" > &lt;&lt;Back</a></h3>
+                            		</c:otherwise>
+                            	</c:choose>
                             </div>
-                            <div class="col-sm-3 col-sm-offset-3 menu">
-                                <p style="font-weight: 700"><a href="${contextPath}/users/editrant/${postDesc.getId()}">Edit</a></p>
-                                <p style="font-weight: 700"><a data-toggle="modal" data-target="#myModal" href="#">Delete</a></p><!-- Add modal here -->
-                                
-                            </div>    
+                            <c:if test="${postDesc.getUser().getId()==user.getId()}">
+	                            <div class="col-sm-3 col-sm-offset-3 menu">
+	                                <p style="font-weight: 700"><a href="${contextPath}/editrant/${postDesc.getId()}">Edit</a></p>
+	                                <p style="font-weight: 700"><a data-toggle="modal" data-target="#myModal" href="#">Delete</a></p><!-- Add modal here -->
+	                                
+	                            </div>    
+                            </c:if>
                         </div>
                         <div class="rant rant-details rant-sm">
 
@@ -217,7 +226,7 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <p>Are you sure you want to delete this rant?</p>
-                        <form:form id="deleteRant" method="POST" action="/users/deleterant/${postDesc.getId()}">
+                        <form:form id="deleteRant" method="POST" action="/deleterant/${postDesc.getId()}">
                             <button style="margin-bottom: 12px" type="submit" class="btn btn-success btn-icon"><i class="fa fa-check-square-o"></i> Delete Rant</button>
 	                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         </form:form>

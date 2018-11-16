@@ -35,7 +35,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/users")
 public class PostController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -54,19 +53,26 @@ public class PostController {
     @Autowired
     private PostServiceImpl postServiceImpl;
     
-    @RequestMapping(value = "/post", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/post", method = RequestMethod.GET)
     public String createPost(Model model, Principal principal) {
     	    
-    	model.addAttribute("user", principal.getName());
+    	User user = null;
+		try {
+			user = userService.findByUsername(principal.getName());
+		} catch (NullPointerException e) {
+			logger.error("No user logged in");
+		}
+    	model.addAttribute("user", user);
     	model.addAttribute("postForm", new Post());    	
         return "users/post";        		
     }
     
-    @RequestMapping(value = "/post", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/post", method = RequestMethod.POST)
     public String createPost(@ModelAttribute("postForm") Post postform,BindingResult bindingResult, Model model,Principal principal) {
 
     	
-    	model.addAttribute("user", principal.getName());
+    	User user = userService.findByUsername(principal.getName());
+    	model.addAttribute("user", user);
     	postValidator.validate(postform, bindingResult);
     	
     	if (bindingResult.hasErrors())
@@ -80,18 +86,11 @@ public class PostController {
     	}
         		
     }
-    @RequestMapping(value = "/postsuccess", method = RequestMethod.GET)
-    public String success(Model model,Principal principal) {
+    @RequestMapping(value = "/users/postsuccess", method = RequestMethod.GET)
+    public String success(Model model,Principal principal) {    	
     	
-    	String currentUser = null;
-    	try {
-			currentUser = principal.getName();
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-    	} catch (NullPointerException e) {
-			logger.info("No user logged in");
-		}
-    	
-    	model.addAttribute("user", currentUser);
+    	User user = userService.findByUsername(principal.getName());
+    	model.addAttribute("user", user);
     	model.addAttribute("verifyPost", "Success!  Your Rant is posted.");
         return "/users/postsuccess";
     }
@@ -99,7 +98,13 @@ public class PostController {
     @RequestMapping(value = "/rant/{postId}", method = RequestMethod.GET)
     public String PostDetails(@PathVariable Long postId,Model model, Principal principal) {
     	
-    	model.addAttribute("user", principal.getName());
+    	User user = null;
+		try {
+			user = userService.findByUsername(principal.getName());
+		} catch (NullPointerException e) {
+			logger.error("No user logged in");
+		}
+    	model.addAttribute("user", user);
     	Optional<Post> post = postService.findById(postId);
 		model.addAttribute("postDesc", post.get());
 		return "/users/post";
@@ -107,7 +112,8 @@ public class PostController {
     @RequestMapping(value = "/editrant/{postId}", method = RequestMethod.GET)
     public String editPost(@PathVariable Long postId,Model model, Principal principal) {
     	
-    	model.addAttribute("user", principal.getName());
+    	User user = userService.findByUsername(principal.getName());
+    	model.addAttribute("user", user);
     	Optional<Post> post = postService.findById(postId);
 		model.addAttribute("postForm", post.get());
 		return "/users/editPost";
@@ -120,7 +126,7 @@ public class PostController {
     	postValidator.validate(postform, bindingResult);
     	
     	if (bindingResult.hasErrors())
-            return "/users/editrant/"+postId;
+            return "/editrant/"+postId;
         
     	else {
     		Optional<Post> post = postService.findById(postId);
@@ -129,15 +135,9 @@ public class PostController {
 	    	String rantUpdated = "Rant is updated succesfully";
 			model.addAttribute("rantUpdated",rantUpdated);
 			model.addAttribute("post",post);
-	        return "redirect:/users/rant/"+postId;
+	        return "redirect:/rant/"+postId;
     	}
     }
-
-	private void updatePost(Optional<Post> post, Post postform) {
-		post.get().setTitle(postform.getTitle());
-		post.get().setRant(postform.getRant());
-		
-	}
 	
 	 @RequestMapping(value = "/deleterant/{postId}", method = RequestMethod.POST)
 	    public String deletePost(@PathVariable Long postId,Model model,
@@ -146,12 +146,16 @@ public class PostController {
 		postRepository.deleteById(postId);
 		User user = userService.findByUsername(principal.getName());
 		redirectAttributes.addFlashAttribute("deleterant", "Your rant has been deleted successfully.");
-		//model.addAttribute("deleterant", "Your rant has been deleted successfully.");		
 		model.addAttribute("user", user);
 		List<Post> post = postServiceImpl.findAllById(user.getId());
 		model.addAttribute("posts", post);
 		return "redirect:/users/profile";
-	    }
+	 }
+	 private void updatePost(Optional<Post> post, Post postform) {
+		 post.get().setTitle(postform.getTitle());
+		 post.get().setRant(postform.getRant());
+		 
+	 }
 }
 
 

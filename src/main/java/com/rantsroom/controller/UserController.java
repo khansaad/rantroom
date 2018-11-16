@@ -114,18 +114,17 @@ public class UserController {
     @RequestMapping(value = {"/","/home"}, method = RequestMethod.GET)
     public String home(Model model, Principal principal) {//, @AuthenticationPrincipal UserDetails currentUser) {    	
     	
-    	//User user = null;
-    	String  currentUser = null; 
+    	User user = null;
     	/**
     	 * Finding logged in User
     	 */
     	try {
-			currentUser = principal.getName();
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
+    		user = userService.findByUsername(principal.getName());			
+			logger.info("CURRENT LOGGED-IN USER: ",user.getUsername());
 		} catch (Exception e) {
 			logger.info("No user logged in");
 		}    	
-		model.addAttribute("user", currentUser);    	
+    	model.addAttribute("user", user);    	
     	List<Post> posts = postService.findAll();
     	model.addAttribute("posts", posts);
     	

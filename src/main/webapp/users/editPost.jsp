@@ -95,7 +95,7 @@
                                     				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 				</form>
 	                                            <li class="dropdown">
-                                          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">${user}<span class="caret"></span></a>
+                                          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">${user.getUsername()}<span class="caret"></span></a>
                                             			<ul class="dropdown-menu sublist" role="menu">
 		                                                    <li><a href="${contextPath}/users/profile">Profile</a></li>		                                                    
 		                                                    <li><a href="${contextPath}/users/profile/settings">Settings</a></li>
@@ -163,7 +163,7 @@
                                 <h3><a style="text-align: left;font-size: 16px" href="${contextPath}/users/profile" > &lt;&lt;Back</a></h3>
                             </div>
                             <div class="col-sm-3 col-sm-offset-3 menu">
-                                <p style="font-weight: 700"><a href="${contextPath}/users/editrant/${post.getId()}">Edit</a></p>
+                                <p style="font-weight: 700"><a href="${contextPath}/editrant/${post.getId()}">Edit</a></p>
                                 <p style="font-weight: 700"><a href="${contextPath}/users/profile">Delete</a></p><!-- Add modal here -->
                                 
                             </div>    

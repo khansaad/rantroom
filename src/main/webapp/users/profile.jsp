@@ -179,7 +179,7 @@
 		                           <div class="list col-sm-6 col-md-6">
 		                               <div class="list-item" style="">
 		                                   <div class="list-content">
-		                                       <h3><a href="${contextPath}/users/rant/${post.getId()}">${post.getTitle()}</a></h3>
+		                                       <h3><a href="${contextPath}/rant/${post.getId()}">${post.getTitle()}</a></h3>
 		                                       <c:set var="shortDesc" value="${fn:substring(post.getRant(), 0, 150)}" />
 		                                       <p><i class="fa fa-quote-left"></i> &nbsp;${shortDesc}....</p>
 		                                   </div><!-- list-content -->

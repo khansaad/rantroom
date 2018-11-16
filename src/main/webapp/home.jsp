@@ -91,7 +91,7 @@
                                       	<c:choose>
                                       		<c:when test="${user != null}">
 	                                            <li class="dropdown">
-                                          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">${user}<span class="caret"></span></a>
+                                          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">${user.getUsername()}<span class="caret"></span></a>
                                             			<ul class="dropdown-menu sublist" role="menu">
 		                                                    <li><a href="${contextPath}/users/profile">Profile</a></li>		                                                    
 		                                                    <li><a href="${contextPath}/users/profile/settings">Settings</a></li>
@@ -129,7 +129,9 @@
                                         <div class="list col-sm-6 col-md-6">
                                             <div class="list-item" style="">
                                                 <div class="list-content">
-                                                    <h3 class="page-header" style="text-align: justify"><a href="#">${post.getTitle()}</a></h3>
+                                                    <h3 class="page-header" style="text-align: justify">
+                                                    	<a href="${contextPath}/rant/${post.getId()}">${post.getTitle()}</a>
+                                                    </h3>
                                                     <c:set var="shortDesc" value="${fn:substring(post.getRant(), 0, 250)}" />
                                                     <p><i class="fa fa-quote-left"></i> &nbsp;${shortDesc}....</p>
                                                 </div><!-- list-content -->
