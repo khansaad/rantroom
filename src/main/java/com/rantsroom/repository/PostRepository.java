@@ -13,7 +13,7 @@ import com.rantsroom.model.User;
 public interface PostRepository extends JpaRepository<Post, Long> {
 	
 	Post findByTitle(String title);
-	Post findByUser(User user);
+	List<Post> findByUser(User user);
 	List<Post> findAll();
 	Optional<Post> findById(Long Id);
 }

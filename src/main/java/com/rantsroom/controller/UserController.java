@@ -92,12 +92,10 @@ public class UserController {
 		try {
 			user = userService.findByUsername(principal.getName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.info("No user found");
 		}
     	if (error != null)
             model.addAttribute("error", "Your username/password is invalid.");
-
         if (logout != null)
             model.addAttribute("message", "You have been logged out successfully.");
         if(delete != null) {
@@ -124,12 +122,10 @@ public class UserController {
     	try {
 			currentUser = principal.getName();
 			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-			} catch (Exception e) {
+		} catch (Exception e) {
 			logger.info("No user logged in");
-		}
-    	
-		model.addAttribute("user", currentUser);//user);
-    	
+		}    	
+		model.addAttribute("user", currentUser);    	
     	List<Post> posts = postService.findAll();
     	model.addAttribute("posts", posts);
     	

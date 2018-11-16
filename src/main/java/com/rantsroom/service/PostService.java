@@ -10,7 +10,7 @@ public interface PostService {
 	
 	void save (Post post);
 	Post findByTitle(String title);
-	Post findByUser(User user);
+	List<Post> findByUser(User user);
 	List<Post> findAll();
 	Optional<Post> findById(Long Id);
 }

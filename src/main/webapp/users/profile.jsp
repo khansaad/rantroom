@@ -124,8 +124,11 @@
 		</header>
         <div id="main">	       
           <div class="container" id="sub-content">
-              <div class="row clearfix profile">	                	
-                  <div class="col-sm-4" style="margin:14px 0">  
+       		<c:if test="${deleterant!=null }">
+       			<p style="color: green; font-size:18px; text-align: center;">${deleterant}</p>	       		
+           	</c:if> 	                	
+              <div class="row clearfix profile">
+                <div class="col-sm-4" style="margin:14px 0">
 					<c:choose>
 				    	<c:when test="${user.getUserProfile().getFileName()!=null}">
 			    			<img src="${contextPath}/uploads/${user.getUserProfile().getFileName()}" class="avatar img-circle" alt="avatar" height="150" width="150">						    		
@@ -134,20 +137,20 @@
 				    		<img src="${contextPath}/resources/images/no-dp-boy.jpg" class="avatar img-circle" alt="avatar" height="150" width="150">
 				    	</c:otherwise>
 			    	</c:choose>
-                  </div>
-                  <c:choose>
-       				<c:when test="${profileUpdated == null}">
-	                    <div class="col-sm-4" style="margin:24px 0">				            
+                </div>
+                <c:choose>
+   					<c:when test="${profileUpdated!= null}">
+						<div class="col-sm-4" style="margin:12px 0">
+							<p style="color: green; font-size:18px; text-align: center;">${profileUpdated}</p>											            
 			                <div class="name_group">
 			                  <h1><strong style="color: #23527c;">${user.getFirstname()}</strong>
 			                  <small>@${user.getUsername()}</small>
 			                  </h1>				                  
 			                </div><!--name_group-->				              		
-						</div><!--_two-->
+						</div><!--_two-->	                   
 					</c:when>
 					<c:otherwise>
-						<div class="col-sm-4" style="margin:12px 0">
-							<p>${profileUpdated}</p>				            
+						<div class="col-sm-4" style="margin:24px 0">				            
 			                <div class="name_group">
 			                  <h1><strong style="color: #23527c;">${user.getFirstname()}</strong>
 			                  <small>@${user.getUsername()}</small>
@@ -156,35 +159,34 @@
 						</div><!--_two-->
 					</c:otherwise>
 				</c:choose>		
-                  <div class="col-sm-4">
-                      <ul class="nav navbar-nav navbar-right menu menu-right">
-                          <li><a href="${contextPath}/users/post" class="btn">Create Rant</a></li>
-                          <li><a href = "${contextPath}/users/editProfile" class="btn">Edit Profile</a></li>
-                      </ul>
-                  </div>    
+                <div class="col-sm-4">
+                   <ul class="nav navbar-nav navbar-right menu menu-right">
+                       <li><a href="${contextPath}/users/post" class="btn">Create Rant</a></li>
+                       <li><a href = "${contextPath}/users/editProfile" class="btn">Edit Profile</a></li>
+                   </ul>
+                </div>    
               </div>    
               
               <div class="row">
                  <div class="col-md-8 col-md-offset-2 col-sm-12">
                  	<div class="clearfix">
                  		<c:choose>
-                   	<c:when test="${posts.isEmpty() == false}">
-                       	<c:forEach  items="${posts}" var ="post">
-                           <div class="list col-sm-6 col-md-6">
-                               <div class="list-item" style="">
-                                   <div class="list-content">
-                                       <h3><a href="${contextPath}/users/rant/${post.getId()}">${post.getTitle()}</a></h3>
-                                       <c:set var="shortDesc" value="${fn:substring(post.getRant(), 0, 150)}" />
-                                       <p><i class="fa fa-quote-left"></i> &nbsp;${shortDesc}....</p>
-                                   </div><!-- list-content -->
-                               </div><!--list-item -->								
-                           </div><!--list -->                                 
-                         </c:forEach> 
-                            <br>
-                       </c:when>        		                                
-                       	<c:otherwise>
-                        		<br><br><center style="font-size:20px">No rants posted by you. Click on 'Create Rant' to get started.</center><br>
-                       </c:otherwise>
+                   			<c:when test="${posts.isEmpty()}">
+                        		<br><br><center style="font-size:20px">No rants posted by you. Click on 'Create Rant' to get started.</center><br>                            
+                       		</c:when>        		                                
+                       		<c:otherwise>
+		                       	<c:forEach  items="${posts}" var ="post">
+		                           <div class="list col-sm-6 col-md-6">
+		                               <div class="list-item" style="">
+		                                   <div class="list-content">
+		                                       <h3><a href="${contextPath}/users/rant/${post.getId()}">${post.getTitle()}</a></h3>
+		                                       <c:set var="shortDesc" value="${fn:substring(post.getRant(), 0, 150)}" />
+		                                       <p><i class="fa fa-quote-left"></i> &nbsp;${shortDesc}....</p>
+		                                   </div><!-- list-content -->
+		                               </div><!--list-item -->								
+		                           </div><!--list -->                                 
+		                         </c:forEach> 
+                       		</c:otherwise>
                       </c:choose>
                   </div><!-- clearfix -->		                                
               </div><!-- inner row -->                	

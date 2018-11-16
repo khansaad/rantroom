@@ -30,11 +30,7 @@ public class PostServiceImpl extends PostRepositoryImpl implements PostService {
 		return postRepository.findByTitle(title);
 	}
 
-	@Override
-	public Post findByUser(User user) {
-		// TODO Auto-generated method stub
-		return postRepository.findByUser(user);
-	}
+	
 
 	@Override
 	public List<Post> findAll() {
@@ -52,6 +48,12 @@ public class PostServiceImpl extends PostRepositoryImpl implements PostService {
 	public Optional<Post> findById(Long Id) {
 		// TODO Auto-generated method stub
 		return postRepository.findById(Id);
+	}
+
+	@Override
+	public List<Post> findByUser(User user) {
+		// TODO Auto-generated method stub
+		return postRepository.findByUser(user);
 	}
 	
 }

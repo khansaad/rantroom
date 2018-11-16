@@ -16,17 +16,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rantsroom.exception.ResourceNotFoundException;
 import com.rantsroom.model.Post;
 import com.rantsroom.model.User;
 import com.rantsroom.repository.PostRepository;
 import com.rantsroom.service.PostService;
+import com.rantsroom.service.PostServiceImpl;
 import com.rantsroom.service.SecurityService;
 import com.rantsroom.service.UserService;
 import com.rantsroom.validator.PostValidator;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -45,18 +48,16 @@ public class PostController {
     @Autowired
     private PostValidator postValidator;
     
+    @Autowired
+    private PostRepository postRepository;
+    
+    @Autowired
+    private PostServiceImpl postServiceImpl;
+    
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String createPost(Model model, Principal principal) {//, @AuthenticationPrincipal UserDetails currentUser) {
-    	
-    	String currentUser = null;
-    	try {
-			currentUser = principal.getName();
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-    	} catch (NullPointerException e) {
-			logger.info("No user logged in");
-		}
-    	
-    	model.addAttribute("user", currentUser);
+    public String createPost(Model model, Principal principal) {
+    	    
+    	model.addAttribute("user", principal.getName());
     	model.addAttribute("postForm", new Post());    	
         return "users/post";        		
     }
@@ -64,24 +65,15 @@ public class PostController {
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public String createPost(@ModelAttribute("postForm") Post postform,BindingResult bindingResult, Model model,Principal principal) {
 
-    	String currentUser = null;
-    	User user = null;
-    	try {
-			currentUser = principal.getName();
-			user = userService.findByUsername(currentUser);
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-    	} catch (NullPointerException e) {
-			logger.info("No user logged in");
-		}
     	
-    	model.addAttribute("user", currentUser);
+    	model.addAttribute("user", principal.getName());
     	postValidator.validate(postform, bindingResult);
     	
     	if (bindingResult.hasErrors())
             return "users/post";
         
     	else {
-        	postform.setUser(user);
+        	postform.setUser(userService.findByUsername(principal.getName()));
 	    	postService.save(postform);
 	    	
 	        return "redirect:/users/postsuccess";
@@ -105,20 +97,61 @@ public class PostController {
     }
     
     @RequestMapping(value = "/rant/{postId}", method = RequestMethod.GET)
-    public String PostDetails(@PathVariable Long postId,Model model, Principal principal) {//@AuthenticationPrincipal UserDetails currentUser) {
+    public String PostDetails(@PathVariable Long postId,Model model, Principal principal) {
     	
-    	String currentUser = null;
-    	try {
-			currentUser = principal.getName();
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-    	} catch (NullPointerException e) {
-			logger.info("No user logged in");
-		}
-    	model.addAttribute("user", currentUser);
+    	model.addAttribute("user", principal.getName());
     	Optional<Post> post = postService.findById(postId);
 		model.addAttribute("postDesc", post.get());
-		return "users/post";
+		return "/users/post";
     }
+    @RequestMapping(value = "/editrant/{postId}", method = RequestMethod.GET)
+    public String editPost(@PathVariable Long postId,Model model, Principal principal) {
+    	
+    	model.addAttribute("user", principal.getName());
+    	Optional<Post> post = postService.findById(postId);
+		model.addAttribute("postForm", post.get());
+		return "/users/editPost";
+    }
+    
+    @RequestMapping(value = "/editrant/{postId}", method = RequestMethod.POST)
+    public String editPost(@PathVariable Long postId, @ModelAttribute("postForm") Post postform,
+    		Model model, Principal principal, BindingResult bindingResult) {
+    	
+    	postValidator.validate(postform, bindingResult);
+    	
+    	if (bindingResult.hasErrors())
+            return "/users/editrant/"+postId;
+        
+    	else {
+    		Optional<Post> post = postService.findById(postId);
+    		updatePost(post, postform);
+	    	postService.save(post.get());
+	    	String rantUpdated = "Rant is updated succesfully";
+			model.addAttribute("rantUpdated",rantUpdated);
+			model.addAttribute("post",post);
+	        return "redirect:/users/rant/"+postId;
+    	}
+    }
+
+	private void updatePost(Optional<Post> post, Post postform) {
+		post.get().setTitle(postform.getTitle());
+		post.get().setRant(postform.getRant());
+		
+	}
+	
+	 @RequestMapping(value = "/deleterant/{postId}", method = RequestMethod.POST)
+	    public String deletePost(@PathVariable Long postId,Model model,
+	    		RedirectAttributes redirectAttributes,Principal principal) {
+	    	
+		postRepository.deleteById(postId);
+		User user = userService.findByUsername(principal.getName());
+		redirectAttributes.addFlashAttribute("deleterant", "Your rant has been deleted successfully.");
+		//model.addAttribute("deleterant", "Your rant has been deleted successfully.");		
+		model.addAttribute("user", user);
+		List<Post> post = postServiceImpl.findAllById(user.getId());
+		model.addAttribute("posts", post);
+		return "redirect:/users/profile";
+	    }
 }
 
 

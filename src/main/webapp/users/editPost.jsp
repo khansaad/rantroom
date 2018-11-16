@@ -129,8 +129,7 @@
                             </div>    
                         </div>
                         <div class="row">
-                            <div class="col-md-9">
-                                <p style="font-size: 13px;font-weight: 700">Note: Racism and full names are not allowed (except celebs)</p>
+                            <div class="col-md-9">                                
                                 <form:form method="POST" modelAttribute="postForm">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -138,9 +137,8 @@
                                                 <label>Rant Title</label>
                                                 <spring:bind path="title">
                                                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                                                        <form:input type="text" path="title" class="form-control" autofocus="true"></form:input>
-                                                        <form:errors path="title"></form:errors>
-                                                        <span>Give your rant a short descriptive Title.</span>           
+                                                        <form:input type="text" path="title" value="${post.getTitle()}" class="form-control" autofocus="true"></form:input>
+                                                        <form:errors path="title"></form:errors>         
                                                     </div>    
                                                 </spring:bind>    
                                             </div>
@@ -150,11 +148,11 @@
                                     <div class="form-group">
                                         <label>Rant</label>
                                         <spring:bind path="rant">
-                                            <form:textarea path="rant" class="form-control" required="required" rows="12"></form:textarea>
+                                            <form:textarea path="rant" value ="${post.getRant()}" class="form-control" required="required" rows="12"></form:textarea>
                                             <form:errors path="rant"></form:errors>                                    
                                         </spring:bind>    
                                     </div> 
-                                    <button style="margin-bottom: 12px"type="submit" class="btn btn-success btn-icon"><i class="fa fa-check-square-o"></i> Submit Your Rant</button>
+                                    <button style="margin-bottom: 12px"type="submit" class="btn btn-success btn-icon"><i class="fa fa-check-square-o"></i> Update Rant</button>
                                 </form:form>
                             </div><!--col-md-9 -->                                       
                         </div><!--row -->
@@ -165,8 +163,8 @@
                                 <h3><a style="text-align: left;font-size: 16px" href="${contextPath}/users/profile" > &lt;&lt;Back</a></h3>
                             </div>
                             <div class="col-sm-3 col-sm-offset-3 menu">
-                                <p style="font-weight: 700"><a href="${contextPath}/users/editrant/${postDesc.getId()}">Edit</a></p>
-                                <p style="font-weight: 700"><a data-toggle="modal" data-target="#myModal" href="#">Delete</a></p><!-- Add modal here -->
+                                <p style="font-weight: 700"><a href="${contextPath}/users/editrant/${post.getId()}">Edit</a></p>
+                                <p style="font-weight: 700"><a href="${contextPath}/users/profile">Delete</a></p><!-- Add modal here -->
                                 
                             </div>    
                         </div>
@@ -204,28 +202,6 @@
 
               <p id="copyright">&copy; 2018 Team RantRoom. All rights reserved | Designed by <a href="http://www.khansaad.com/" target="_blank" >Saad </a>| Mentored by <a href="http://www.roosnam.com/" target="_blank" >Mansoor</a></p>
         </footer>
-        <!-- The Modal -->
-        <div class="modal fade" id="myModal">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                      <h5 class="modal-title" style="color: #0F6BBA">Delete Rant</h5>
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this rant?</p>
-                        <form:form id="deleteRant" method="POST" action="/users/deleterant/${postDesc.getId()}">
-                            <button style="margin-bottom: 12px" type="submit" class="btn btn-success btn-icon"><i class="fa fa-check-square-o"></i> Delete Rant</button>
-	                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        </form:form>
-                    </div>
-                      
-                  </div>
-                </div>
-              </div><!-- Modal end -->
         </div>    
         <script src="${contextPath}/resources/js/jquery.min.js"></script>
         <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

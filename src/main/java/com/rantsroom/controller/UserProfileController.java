@@ -35,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.rantsroom.model.Post;
 import com.rantsroom.model.User;
 import com.rantsroom.model.UserProfile;
+import com.rantsroom.repository.PostRepository;
 import com.rantsroom.service.PostServiceImpl;
 import com.rantsroom.service.UserProfileService;
 import com.rantsroom.service.UserProfileServiceImpl;
@@ -59,8 +60,8 @@ public class UserProfileController {
     public static String UPLOADED_FOLDER = System.getProperty("user.dir") + "\\src\\main\\webapp\\uploads";
     
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
-    public String welcome(Model model, Principal principal) {    	
-    	
+    public String welcome(Model model, Principal principal) {
+    		
     	User user = userService.findByUsername(principal.getName());
     	model.addAttribute("user", user);
     	List<Post> posts = postServiceImpl.findAllById(user.getId());
@@ -82,7 +83,7 @@ public class UserProfileController {
     }
 	
 	@RequestMapping(value = "/users/editProfile", method = RequestMethod.POST)
-    public String editProfile(@ModelAttribute("userForm") User userForm,
+    public String editProfile(@ModelAttribute("userForm") User userForm,RedirectAttributes redirectAttributes,
     		BindingResult bindingResult, Model model, HttpServletRequest request, Principal principal) {		
 		
 		userValidator.validateUpdate(userForm, bindingResult);
@@ -94,8 +95,8 @@ public class UserProfileController {
 			User user = userService.findByUsername(principal.getName());//userService.findById(Id).get();
 			updateUser(user, userForm);			
 			userService.save(user);
-			String profileUpdated = "Your profile is updated succesfully";
-			model.addAttribute("profileUpdated",profileUpdated);
+			redirectAttributes.addFlashAttribute("profileUpdated","Your profile is updated succesfully");
+			//model.addAttribute("profileUpdated","Your profile is updated succesfully");
 			model.addAttribute("user", user);
 			List<Post> posts = postServiceImpl.findAllById(user.getId());
 	    	if(posts.isEmpty())
