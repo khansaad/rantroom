@@ -68,7 +68,8 @@ public class PostController {
     }
     
     @RequestMapping(value = "/users/post", method = RequestMethod.POST)
-    public String createPost(@ModelAttribute("postForm") Post postform,BindingResult bindingResult, Model model,Principal principal) {
+    public String createPost(@ModelAttribute("postForm") Post postform,BindingResult bindingResult, 
+    		Model model,Principal principal, RedirectAttributes redirectAttributes) {
 
     	
     	User user = userService.findByUsername(principal.getName());
@@ -81,18 +82,10 @@ public class PostController {
     	else {
         	postform.setUser(userService.findByUsername(principal.getName()));
 	    	postService.save(postform);
-	    	
-	        return "redirect:/users/postsuccess";
+	    	redirectAttributes.addFlashAttribute("poststatus", "Success!  Your Rant is posted.");
+	        return "redirect:/rant/"+postform.getId();
     	}
         		
-    }
-    @RequestMapping(value = "/users/postsuccess", method = RequestMethod.GET)
-    public String success(Model model,Principal principal) {    	
-    	
-    	User user = userService.findByUsername(principal.getName());
-    	model.addAttribute("user", user);
-    	model.addAttribute("verifyPost", "Success!  Your Rant is posted.");
-        return "/users/postsuccess";
     }
     
     @RequestMapping(value = "/rant/{postId}", method = RequestMethod.GET)
@@ -161,6 +154,14 @@ public class PostController {
 
 
     /*
+@RequestMapping(value = "/users/postsuccess", method = RequestMethod.GET)
+public String success(Model model,Principal principal) {    	
+	
+	User user = userService.findByUsername(principal.getName());
+	model.addAttribute("user", user);
+	model.addAttribute("verifyPost", "");
+	return "/users/postsuccess";
+}
 public static Long getCurrentUserId() {
 	SecurityContext securityContext = SecurityContextHolder.getContext();
 	Authentication authentication = securityContext.getAuthentication();

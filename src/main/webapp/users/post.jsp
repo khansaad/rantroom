@@ -161,6 +161,9 @@
                     </c:when>
                     <c:otherwise>
                         <div class="row">
+                        	<c:if test="${poststatus!=null}">
+                        		<br><p style="color: green; font-size:18px; text-align: center;">${poststatus}</p>
+                        	</c:if>
                             <div class="col-sm-6">
                             	<c:choose>
                             		<c:when test="${user != null}">
@@ -180,7 +183,6 @@
                             </c:if>
                         </div>
                         <div class="rant rant-details rant-sm">
-
                             <h3 class="rantTitle">${postDesc.getTitle()}</h3>
                             <p class="fa fa-quote-left text-quote-icon text-quote-icon-left" style="margin-bottom: 24px">${postDesc.getRant()}</p>    
                         </div> 
@@ -216,8 +218,7 @@
         <!-- The Modal -->
         <div class="modal fade" id="myModal">
                 <div class="modal-dialog">
-                  <div class="modal-content">
-
+                  <div class="modal-content">					
                     <!-- Modal Header -->
                     <div class="modal-header">
                       <h5 class="modal-title" style="color: #0F6BBA">Delete Rant</h5>
@@ -231,7 +232,6 @@
 	                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         </form:form>
                     </div>
-                      
                   </div>
                 </div>
               </div><!-- Modal end -->

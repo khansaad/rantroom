@@ -111,13 +111,17 @@
                     <div class="col-sm-4 col-sm-offset-4">
                     </div>
                 </div>
-                <div class="row">                
+                <div class="row">
+                	<c:if test="${verifyUser!=null}">
+                		<br><p style="color: green; font-size:18px; text-align: center;">${verifyUser}</p>
+                	</c:if>                
                     <div class="col-sm-4 col-sm-offset-4">
                         <div class= "form-body">
                             <h3>Login</h3>
                             <span style="color: #01DF01;">${message}</span>
+                            <span style="color: red;">${error}</span>
                             <div class="login-form">
-                                <form method="POST" action="${contextPath}/login">
+                                <form:form method="POST" action="${contextPath}/login" modelAttribute="userForm">
                                     <div class="form-group ${error != null ? 'has-error' : ''}">
                                         <div>
                                             <label>USERNAME:</label>
@@ -127,13 +131,12 @@
                                             <label>PASSWORD:</label>
                                             <input name="password" type="password" class="form-control">
                                         </div>    
-                                        <span>${error}</span>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                                         <button type="submit">Sign In</button>
 
                                     </div>
-                                </form>
+                                </form:form>
                                 <h4 class="text-center" style="font-size: 12px"><a href="${contextPath}/registration">Not a Member?</a></h4>
                             </div><!--log-in-form-->                       
                         </div><!--form-body-->

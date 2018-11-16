@@ -104,7 +104,7 @@
                                         	</c:when>
                                         	<c:otherwise>
                                         		<li><a href="${contextPath}/login">Login</a></li>
-	                                            <li><a class="home-links" href="${contextPath}/registration">Sign Up</a></li>
+	                                            <li><a class="" href="${contextPath}/registration">Sign Up</a></li>
                                         	</c:otherwise>
                                         </c:choose>	    
                                       </ul>     
@@ -117,8 +117,15 @@
 		</header>
         <div id="main">
             <div class="container" id="sub-content">
-                <div class="row">
-                   <p id="intro">Welcome to RantRoom. A public forum for people to rant about anything under the sun. Here, you can speak your heart out with complete anonymity. So, what are you waiting for? Sign up instantly and start ranting.</p>                                       
+                <div class="row profile">
+                	<c:choose>
+                		<c:when test="${postregistration!=null}">
+		                   <br><p style="font-weight: 500;font-size: 18px;margin-left: 10px">${postregistration}</p>
+                		</c:when>
+                		<c:otherwise>
+		                   <p id="intro">Welcome to RantRoom. A public forum for people to rant about anything under the sun. Here, you can speak your heart out with complete anonymity. So, what are you waiting for? Sign up instantly and start ranting.</p>                                       
+                		</c:otherwise>
+                	</c:choose>                	
                 </div><!-- row --> 
                 <div class="row">
                     <div class="col-md-10 col-sm-12">

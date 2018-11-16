@@ -33,12 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/resources/**","/","/home","/confirm","/verification").permitAll()
+                    .antMatchers("/resources/**","/","/home").permitAll()
                     .antMatchers("/users/**").authenticated()
-                    //.antMatchers("/post").authenticated()
-                    //.antMatchers("/postsuccess").hasAnyRole()
-//                    .antMatchers("/post").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//                    .antMatchers("/postsuccess").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                     .anyRequest().permitAll()
                     .and()
                 .formLogin()
@@ -51,8 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    	// Test comment
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {    	
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 	/*@Override

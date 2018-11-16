@@ -125,7 +125,7 @@
         <div id="main">	       
           <div class="container" id="sub-content">
        		<c:if test="${deleterant!=null }">
-       			<p style="color: green; font-size:18px; text-align: center;">${deleterant}</p>	       		
+       			<br><p style="color: green; font-size:18px; text-align: center;">${deleterant}</p>	       		
            	</c:if> 	                	
               <div class="row clearfix profile">
                 <div class="col-sm-4" style="margin:14px 0">
@@ -141,7 +141,7 @@
                 <c:choose>
    					<c:when test="${profileUpdated!= null}">
 						<div class="col-sm-4" style="margin:12px 0">
-							<p style="color: green; font-size:18px; text-align: center;">${profileUpdated}</p>											            
+							<br><p style="color: green; font-size:18px; text-align: center;">${profileUpdated}</p>											            
 			                <div class="name_group">
 			                  <h1><strong style="color: #23527c;">${user.getFirstname()}</strong>
 			                  <small>@${user.getUsername()}</small>

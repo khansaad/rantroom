@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rantsroom.model.Post;
 import com.rantsroom.model.User;
@@ -86,7 +87,8 @@ public class UserController {
     }
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(String error, Model model, String logout, String delete, Principal principal) {
+    public String login(String error, Model model, String logout, 
+    		String delete, Principal principal) {
     	
     	User user = null;
 		try {
@@ -132,23 +134,26 @@ public class UserController {
     }
     
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
-    public String confirm(Model model) {   	
-    	
-        return "confirm";
+    public String confirm(Model model,RedirectAttributes redirectAttributes) {   	
+    	redirectAttributes.addFlashAttribute("postregistration",
+    			"Thanks for joining RantRoom. Just one more step and you'll be ready to Rant.\r\n" + 
+    			"We have sent you a confirmation mail. \nKindly click on the link given in mail to get verified and get started.");
+        return "redirect:/home";
     }
     
     @RequestMapping(value = "/verification", method = RequestMethod.GET)
-    public String verify(Model model, @RequestParam("token") String token) {   	
+    public String verify(Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {   	
     	User user = userService.findByConfirmationToken(token);
     	
-    	if (user == null) { // No token found in DB
-    		model.addAttribute("verifyUser", "Oops!  This is an invalid confirmation link.");
-    	} else { // Token found
-    		model.addAttribute("verifyUser", "Success!  Your e-mail is now verified.");
+    	if (user == null) // No token found in DB
+    		redirectAttributes.addFlashAttribute("verifyUser", "Oops!  This is an invalid confirmation link or the link is expired.");
+    	else { // Token found
+    		redirectAttributes.addFlashAttribute("verifyUser", "Success!  Your e-mail is verified. Login below to start ranting.");
     		user.setActive(true);
     		user.setEmail_confirmed(true);
     	}
-        return "verification";
+    	
+        return "redirect:/login";
     }
     
     // Sending email for verification
