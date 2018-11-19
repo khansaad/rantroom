@@ -108,7 +108,7 @@
                                         	</c:when>
                                         	<c:otherwise>
                                         		<li><a href="${contextPath}/login">Login</a></li>
-	                                            <li><a class="home-links" href="${contextPath}/registration">Sign Up</a></li>
+	                                            <li><a href="${contextPath}/registration">Sign Up</a></li>
                                         	</c:otherwise>
                                         </c:choose>	    
                                       </ul>                                       
@@ -220,7 +220,7 @@
                             </spring:bind>
                         </div>    
                        	<div class="form-group">
-				          <label class="col-md-3 control-label"></label>
+				          <label class="col-md-3"></label>
 				          <div class="col-md-8">
 				            <button type="submit" class="btn btn-primary">Save Changes</button>						              						              
 				          </div>

@@ -27,7 +27,7 @@ public class User extends AuditModel{
     
     @OnDelete(action=OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Post> posts;
+    private List<Rant> rants;
     
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", 
@@ -38,19 +38,16 @@ public class User extends AuditModel{
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private UserProfile userProfile;
     
-	public List<Post> getPosts() {
-		return posts;
-	}	
-
-	public void setPosts(List<Post> posts) {
-		
-		this.posts.clear();
-	   // this.posts.addAll(posts);
-		
-		this.posts = posts;
+    public List<Rant> getRants() {
+		return rants;
 	}
-	
-    public Long getId() {
+
+	public void setRants(List<Rant> rants) {
+		this.rants.clear();
+		this.rants = rants;
+	}
+
+	public Long getId() {
         return id;
     }
 

@@ -105,7 +105,7 @@
                                         	</c:when>
                                         	<c:otherwise>
                                         		<li><a href="${contextPath}/login">Login</a></li>
-	                                            <li><a class="home-links" href="${contextPath}/registration">Sign Up</a></li>
+	                                            <li><a href="${contextPath}/registration">Sign Up</a></li>
                                         	</c:otherwise>
                                         </c:choose>	    
                                       </ul>    
@@ -119,7 +119,7 @@
         <div id="main">
             <div class="container" id="sub-content">
             	<c:choose>
-            	   <c:when test="${postDesc == null }"> 
+            	   <c:when test="${rantDesc == null }"> 
                         <div class="row">
                             <div class="col-sm-6">
                                 <h3 class="home-h2" style="text-align: left;"> Start Ranting Below</h3>
@@ -130,15 +130,15 @@
                         </div>
                         <div class="row">
                             <div class="col-md-9">                                
-                                <form:form method="POST" modelAttribute="postForm">
+                                <form:form method="POST" modelAttribute="rantForm">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Rant Title</label>
-                                                <spring:bind path="title">
+                                                <spring:bind path="rantTitle">
                                                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                                                        <form:input type="text" path="title" value="${post.getTitle()}" class="form-control" autofocus="true"></form:input>
-                                                        <form:errors path="title"></form:errors>         
+                                                        <form:input type="text" path="rantTitle" value="${rant.getRantTitle()}" class="form-control" autofocus="true"></form:input>
+                                                        <form:errors path="rantTitle"></form:errors>         
                                                     </div>    
                                                 </spring:bind>    
                                             </div>
@@ -147,12 +147,12 @@
 
                                     <div class="form-group">
                                         <label>Rant</label>
-                                        <spring:bind path="rant">
-                                            <form:textarea path="rant" value ="${post.getRant()}" class="form-control" required="required" rows="12"></form:textarea>
-                                            <form:errors path="rant"></form:errors>                                    
+                                        <spring:bind path="rantDesc">
+                                            <form:textarea path="rantDesc" value ="${rant.getRantDesc()}" class="form-control" required="required" rows="12"></form:textarea>
+                                            <form:errors path="rantDesc"></form:errors>                                    
                                         </spring:bind>    
                                     </div> 
-                                    <button style="margin-bottom: 12px"type="submit" class="btn btn-success btn-icon"><i class="fa fa-check-square-o"></i> Update Rant</button>
+                                    <button type="submit" class="btn btn-primary rantsubmit">Update Rant</button>
                                 </form:form>
                             </div><!--col-md-9 -->                                       
                         </div><!--row -->
@@ -163,15 +163,15 @@
                                 <h3><a style="text-align: left;font-size: 16px" href="${contextPath}/users/profile" > &lt;&lt;Back</a></h3>
                             </div>
                             <div class="col-sm-3 col-sm-offset-3 menu">
-                                <p style="font-weight: 700"><a href="${contextPath}/editrant/${post.getId()}">Edit</a></p>
+                                <p style="font-weight: 700"><a href="${contextPath}/editrant/${rant.getId()}">Edit</a></p>
                                 <p style="font-weight: 700"><a href="${contextPath}/users/profile">Delete</a></p><!-- Add modal here -->
                                 
                             </div>    
                         </div>
                         <div class="rant rant-details rant-sm">
 
-                            <h3 class="rantTitle">${postDesc.getTitle()}</h3>
-                            <p class="fa fa-quote-left text-quote-icon text-quote-icon-left" style="margin-bottom: 24px">${postDesc.getRant()}</p>    
+                            <h3 class="rantTitle">${rantDesc.getRantTitle()}</h3>
+                            <p class="fa fa-quote-left text-quote-icon text-quote-icon-left" style="margin-bottom: 24px">${rantDesc.getRantDesc()}</p>    
                         </div> 
                     </c:otherwise>
                 </c:choose> 

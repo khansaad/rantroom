@@ -107,7 +107,7 @@
                                         	</c:when>
                                         	<c:otherwise>
                                         		<li><a href="${contextPath}/login">Login</a></li>
-	                                            <li><a class="home-links" href="${contextPath}/registration">Sign Up</a></li>
+	                                            <li><a href="${contextPath}/registration">Sign Up</a></li>
                                         	</c:otherwise>
                                         </c:choose>	    
                                       </ul>                                       
@@ -161,7 +161,7 @@
 				</c:choose>		
                 <div class="col-sm-4">
                    <ul class="nav navbar-nav navbar-right menu menu-right">
-                       <li><a href="${contextPath}/users/post" class="btn">Create Rant</a></li>
+                       <li><a href="${contextPath}/users/rant" class="btn">Create Rant</a></li>
                        <li><a href = "${contextPath}/users/editProfile" class="btn">Edit Profile</a></li>
                    </ul>
                 </div>    
@@ -171,16 +171,16 @@
                  <div class="col-md-8 col-md-offset-2 col-sm-12">
                  	<div class="clearfix">
                  		<c:choose>
-                   			<c:when test="${posts.isEmpty()}">
+                   			<c:when test="${rants.isEmpty()}">
                         		<br><br><center style="font-size:20px">No rants posted by you. Click on 'Create Rant' to get started.</center><br>                            
                        		</c:when>        		                                
                        		<c:otherwise>
-		                       	<c:forEach  items="${posts}" var ="post">
+		                       	<c:forEach  items="${rants}" var ="rant">
 		                           <div class="list col-sm-6 col-md-6">
 		                               <div class="list-item" style="">
 		                                   <div class="list-content">
-		                                       <h3><a href="${contextPath}/rant/${post.getId()}">${post.getTitle()}</a></h3>
-		                                       <c:set var="shortDesc" value="${fn:substring(post.getRant(), 0, 150)}" />
+		                                       <h3><a href="${contextPath}/rant/${rant.getId()}">${rant.getRantTitle()}</a></h3>
+		                                       <c:set var="shortDesc" value="${fn:substring(rant.getRantDesc(), 0, 150)}" />
 		                                       <p><i class="fa fa-quote-left"></i> &nbsp;${shortDesc}....</p>
 		                                   </div><!-- list-content -->
 		                               </div><!--list-item -->								

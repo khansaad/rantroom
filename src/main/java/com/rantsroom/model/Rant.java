@@ -1,13 +1,9 @@
 package com.rantsroom.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,18 +14,22 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "posts")
-public class Post extends AuditModel {	
+@Table(name = "rant")
+public class Rant extends AuditModel {	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;	
 	@NotNull
     @Size(max = 100)
-    private String title;	
+    private String rantTitle;	
 	@NotNull
     @Lob
-	private String rant;	
+	private String rantDesc;	
 	private boolean deleted;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -48,27 +48,29 @@ public class Post extends AuditModel {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getRant() {
-		return rant;
-	}
-	public void setRant(String rant) {
-		this.rant = rant;
-	}
+	
 	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+	public String getRantTitle() {
+		return rantTitle;
+	}
+	public void setRantTitle(String rantTitle) {
+		this.rantTitle = rantTitle;
+	}
+	public String getRantDesc() {
+		return rantDesc;
+	}
+	public void setRantDesc(String rantDesc) {
+		this.rantDesc = rantDesc;
+	}
 	@Override
 	public String toString() {
-		return "Post [id=" + id + ", title=" + title + ", rant=" + rant + ", deleted=" + deleted + ", user=" + user
-				+ "]";
-	}	
+		return "Rants [id=" + id + ", rantTitle=" + rantTitle + ", rantDesc=" + rantDesc + ", deleted=" + deleted
+				+ ", user=" + user + "]";
+	}
+		
 }

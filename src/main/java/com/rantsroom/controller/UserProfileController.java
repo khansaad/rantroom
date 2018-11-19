@@ -32,11 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.rantsroom.model.Post;
+import com.rantsroom.model.Rant;
 import com.rantsroom.model.User;
 import com.rantsroom.model.UserProfile;
-import com.rantsroom.repository.PostRepository;
-import com.rantsroom.service.PostServiceImpl;
+import com.rantsroom.service.RantServiceImpl;
 import com.rantsroom.service.UserProfileService;
 import com.rantsroom.service.UserProfileServiceImpl;
 import com.rantsroom.service.UserService;
@@ -50,7 +49,7 @@ public class UserProfileController {
     @Autowired
     private UserService userService;
     @Autowired
-    private PostServiceImpl postServiceImpl;
+    private RantServiceImpl rantServiceImpl;
     @Autowired
     private UserValidator userValidator;
     @Autowired
@@ -64,10 +63,10 @@ public class UserProfileController {
     		
     	User user = userService.findByUsername(principal.getName());
     	model.addAttribute("user", user);
-    	List<Post> posts = postServiceImpl.findAllById(user.getId());
-    	if(posts.isEmpty())
-    		logger.info("No posts found");
-    	model.addAttribute("posts", posts);
+    	List<Rant> rants = rantServiceImpl.findAllById(user.getId());
+    	if(rants.isEmpty())
+    		logger.info("No rants found");
+    	model.addAttribute("rants", rants);
         
         return "users/profile";
     }
@@ -98,10 +97,10 @@ public class UserProfileController {
 			redirectAttributes.addFlashAttribute("profileUpdated","Your profile is updated succesfully");
 			//model.addAttribute("profileUpdated","Your profile is updated succesfully");
 			model.addAttribute("user", user);
-			List<Post> posts = postServiceImpl.findAllById(user.getId());
-	    	if(posts.isEmpty())
-	    		logger.info("No posts found");
-			model.addAttribute("posts", posts);
+			List<Rant> rants = rantServiceImpl.findAllById(user.getId());
+	    	if(rants.isEmpty())
+	    		logger.info("No rants found");
+			model.addAttribute("rants", rants);
 			
 			return "redirect:/users/profile";
 		}		

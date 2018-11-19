@@ -164,10 +164,10 @@
                                         </div>
                                     </spring:bind>
                                 </div>    
-                                <button type="submit">Sign up</button>
+                                <button type="submit" class="btn btn-primary">Sign up</button>
                             </form:form>                            
                         </div><!--log-in-form-->
-                        <h4 class="text-center" style="font-size: 12px;margin-top: 30px"><a href="${contextPath}/login">Already a Member?</a></h4>
+                        <h4 class="text-center"style="font-size: 14px"><a href="${contextPath}/registration" style="color: #2E2E2E;">Already a Member?</a></h4>                        
                     </div><!--form-body-->                    
                 </div><!--col-sm-4-->  
             </div><!--row-->    

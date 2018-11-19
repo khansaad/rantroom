@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.rantsroom.model.Post;
+import com.rantsroom.model.Rant;
 import com.rantsroom.model.User;
 import com.rantsroom.repository.UserRepository;
 import com.rantsroom.service.EmailService;
-import com.rantsroom.service.PostService;
-import com.rantsroom.service.PostServiceImpl;
+import com.rantsroom.service.RantService;
+import com.rantsroom.service.RantServiceImpl;
 import com.rantsroom.service.SecurityService;
 import com.rantsroom.service.UserService;
 import com.rantsroom.validator.UserValidator;
@@ -48,13 +48,7 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
     @Autowired
-    private SecurityService securityService;
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private PostServiceImpl postServiceImpl;
-    
-
+    private RantService rantService;
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -62,7 +56,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model, HttpServletRequest request) {
+    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, 
+    		Model model) {
     	
     	userValidator.validate(userForm, bindingResult);
 
@@ -127,8 +122,8 @@ public class UserController {
 			logger.info("No user logged in");
 		}    	
     	model.addAttribute("user", user);    	
-    	List<Post> posts = postService.findAll();
-    	model.addAttribute("posts", posts);
+    	List<Rant> rants = rantService.findAll();
+    	model.addAttribute("rants", rants);
     	
         return "home";
     }

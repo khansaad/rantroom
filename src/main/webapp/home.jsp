@@ -104,7 +104,7 @@
                                         	</c:when>
                                         	<c:otherwise>
                                         		<li><a href="${contextPath}/login">Login</a></li>
-	                                            <li><a class="" href="${contextPath}/registration">Sign Up</a></li>
+	                                            <li><a class="home-links" href="${contextPath}/registration">Sign Up</a></li>
                                         	</c:otherwise>
                                         </c:choose>	    
                                       </ul>     
@@ -131,15 +131,15 @@
                     <div class="col-md-10 col-sm-12">
                     	<div class="clearfix">
                     		<c:choose>
-		                    	<c:when test="${posts != null}">
-		                        	<c:forEach  items="${posts}" var ="post">
+		                    	<c:when test="${rants != null}">
+		                        	<c:forEach  items="${rants}" var ="rantData">
                                         <div class="list col-sm-6 col-md-6">
                                             <div class="list-item" style="">
                                                 <div class="list-content">
                                                     <h3 class="page-header" style="text-align: justify">
-                                                    	<a href="${contextPath}/rant/${post.getId()}">${post.getTitle()}</a>
+                                                    	<a href="${contextPath}/rant/${rantData.getId()}">${rantData.getRantTitle()}</a>
                                                     </h3>
-                                                    <c:set var="shortDesc" value="${fn:substring(post.getRant(), 0, 250)}" />
+                                                    <c:set var="shortDesc" value="${fn:substring(rantData.getRantDesc(), 0, 250)}" />
                                                     <p><i class="fa fa-quote-left"></i> &nbsp;${shortDesc}....</p>
                                                 </div><!-- list-content -->
                                             </div><!--list-item -->								
@@ -151,7 +151,7 @@
 	                              	<div class="list">
 		                                        <div class="list-item" style="">
 		                                            <div class="list-content">
-		                                                <p><i class="fa fa-quote-left"></i> &nbsp;No post found</p>
+		                                                <p><i class="fa fa-quote-left"></i> &nbsp;No rants found</p>
 		                                            </div><!-- list-content -->
 		                                        </div><!--list-item -->								
 		                            </div><!-- rants-list -->

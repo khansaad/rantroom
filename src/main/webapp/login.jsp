@@ -133,11 +133,11 @@
                                         </div>    
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-                                        <button type="submit">Sign In</button>
+                                        <button type="submit" class="btn btn-primary">Sign In</button>
 
                                     </div>
                                 </form:form>
-                                <h4 class="text-center" style="font-size: 12px"><a href="${contextPath}/registration">Not a Member?</a></h4>
+                                <h4 class="text-center"style="font-size: 14px"><a href="${contextPath}/registration" style="color: #2E2E2E;">Not a Member?</a></h4>
                             </div><!--log-in-form-->                       
                         </div><!--form-body-->
                     </div><!--col-sm-4-->  

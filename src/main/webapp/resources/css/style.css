@@ -223,6 +223,9 @@ html{
     -o-transition: .5s all;
     -ms-transition: .5s all; 
 }
+.rantsubmit{	
+	margin-bottom: 12px;	
+}
 .form-body button:hover {
     border: 1px solid black;
     transition: .5s all;
@@ -367,7 +370,7 @@ h5 {
     display: block;
     border-bottom: 1px solid #cccccc;
     padding-bottom: 8px;
-    color: #5c3566;
+    color: #3178B0;
     line-height: 1.2;
     position: relative;
     font-size: 20px;

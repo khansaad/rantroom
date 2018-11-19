@@ -4,57 +4,45 @@ package com.rantsroom.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.rantsroom.exception.ResourceNotFoundException;
-import com.rantsroom.model.Post;
+import com.rantsroom.model.Rant;
 import com.rantsroom.model.User;
-import com.rantsroom.repository.PostRepository;
-import com.rantsroom.service.PostService;
-import com.rantsroom.service.PostServiceImpl;
-import com.rantsroom.service.SecurityService;
+import com.rantsroom.repository.RantRepository;
+import com.rantsroom.service.RantService;
+import com.rantsroom.service.RantServiceImpl;
 import com.rantsroom.service.UserService;
-import com.rantsroom.validator.PostValidator;
+import com.rantsroom.validator.RantValidator;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 @Controller
-public class PostController {
+public class RantController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private PostService postService;
+    private RantService rantService;
     
     @Autowired
     private UserService userService;
     
     @Autowired
-    private PostValidator postValidator;
+    private RantValidator rantValidator;
     
     @Autowired
-    private PostRepository postRepository;
+    private RantRepository rantRepository;
     
     @Autowired
-    private PostServiceImpl postServiceImpl;
+    private RantServiceImpl rantServiceImpl;
     
-    @RequestMapping(value = "/users/post", method = RequestMethod.GET)
-    public String createPost(Model model, Principal principal) {
+    @RequestMapping(value = "/users/rant", method = RequestMethod.GET)
+    public String createRant(Model model, Principal principal) {
     	    
     	User user = null;
 		try {
@@ -63,33 +51,33 @@ public class PostController {
 			logger.error("No user logged in");
 		}
     	model.addAttribute("user", user);
-    	model.addAttribute("postForm", new Post());    	
-        return "users/post";        		
+    	model.addAttribute("rantForm", new Rant());    	
+        return "users/rant";        		
     }
     
-    @RequestMapping(value = "/users/post", method = RequestMethod.POST)
-    public String createPost(@ModelAttribute("postForm") Post postform,BindingResult bindingResult, 
+    @RequestMapping(value = "/users/rant", method = RequestMethod.POST)
+    public String createRant(@ModelAttribute("ranttForm") Rant rantform,BindingResult bindingResult, 
     		Model model,Principal principal, RedirectAttributes redirectAttributes) {
 
     	
     	User user = userService.findByUsername(principal.getName());
     	model.addAttribute("user", user);
-    	postValidator.validate(postform, bindingResult);
+    	rantValidator.validate(rantform, bindingResult);
     	
     	if (bindingResult.hasErrors())
-            return "users/post";
+            return "users/rant";
         
     	else {
-        	postform.setUser(userService.findByUsername(principal.getName()));
-	    	postService.save(postform);
-	    	redirectAttributes.addFlashAttribute("poststatus", "Success!  Your Rant is posted.");
-	        return "redirect:/rant/"+postform.getId();
+        	rantform.setUser(userService.findByUsername(principal.getName()));
+	    	rantService.save(rantform);
+	    	redirectAttributes.addFlashAttribute("rantstatus", "Success!  Your Rant is posted.");
+	        return "redirect:/rant/"+rantform.getId();
     	}
         		
     }
     
-    @RequestMapping(value = "/rant/{postId}", method = RequestMethod.GET)
-    public String PostDetails(@PathVariable Long postId,Model model, Principal principal) {
+    @RequestMapping(value = "/rant/{rantId}", method = RequestMethod.GET)
+    public String RantDetails(@PathVariable Long rantId,Model model, Principal principal) {
     	
     	User user = null;
 		try {
@@ -98,55 +86,55 @@ public class PostController {
 			logger.error("No user logged in");
 		}
     	model.addAttribute("user", user);
-    	Optional<Post> post = postService.findById(postId);
-		model.addAttribute("postDesc", post.get());
-		return "/users/post";
+    	Optional<Rant> rant = rantService.findById(rantId);
+		model.addAttribute("rantDesc", rant.get());
+		return "/users/rant";
     }
-    @RequestMapping(value = "/editrant/{postId}", method = RequestMethod.GET)
-    public String editPost(@PathVariable Long postId,Model model, Principal principal) {
+    @RequestMapping(value = "/editrant/{rantId}", method = RequestMethod.GET)
+    public String editRant(@PathVariable Long rantId,Model model, Principal principal) {
     	
     	User user = userService.findByUsername(principal.getName());
     	model.addAttribute("user", user);
-    	Optional<Post> post = postService.findById(postId);
-		model.addAttribute("postForm", post.get());
-		return "/users/editPost";
+    	Optional<Rant> rant = rantService.findById(rantId);
+		model.addAttribute("rantForm", rant.get());
+		return "/users/editRant";
     }
     
-    @RequestMapping(value = "/editrant/{postId}", method = RequestMethod.POST)
-    public String editPost(@PathVariable Long postId, @ModelAttribute("postForm") Post postform,
+    @RequestMapping(value = "/editrant/{rantId}", method = RequestMethod.POST)
+    public String editRant(@PathVariable Long rantId, @ModelAttribute("rantForm") Rant rantform,
     		Model model, Principal principal, BindingResult bindingResult) {
     	
-    	postValidator.validate(postform, bindingResult);
+    	rantValidator.validate(rantform, bindingResult);
     	
     	if (bindingResult.hasErrors())
-            return "/editrant/"+postId;
+            return "/editrant/"+rantId;
         
     	else {
-    		Optional<Post> post = postService.findById(postId);
-    		updatePost(post, postform);
-	    	postService.save(post.get());
+    		Optional<Rant> rant = rantService.findById(rantId);
+    		updateRant(rant, rantform);
+	    	rantService.save(rant.get());
 	    	String rantUpdated = "Rant is updated succesfully";
 			model.addAttribute("rantUpdated",rantUpdated);
-			model.addAttribute("post",post);
-	        return "redirect:/rant/"+postId;
+			model.addAttribute("rant",rant);
+	        return "redirect:/rant/"+rantId;
     	}
     }
 	
-	 @RequestMapping(value = "/deleterant/{postId}", method = RequestMethod.POST)
-	    public String deletePost(@PathVariable Long postId,Model model,
+	 @RequestMapping(value = "/deleterant/{rantId}", method = RequestMethod.POST)
+	    public String deleteRant(@PathVariable Long rantId,Model model,
 	    		RedirectAttributes redirectAttributes,Principal principal) {
 	    	
-		postRepository.deleteById(postId);
+		rantRepository.deleteById(rantId);
 		User user = userService.findByUsername(principal.getName());
 		redirectAttributes.addFlashAttribute("deleterant", "Your rant has been deleted successfully.");
 		model.addAttribute("user", user);
-		List<Post> post = postServiceImpl.findAllById(user.getId());
-		model.addAttribute("posts", post);
+		List<Rant> rant = rantServiceImpl.findAllById(user.getId());
+		model.addAttribute("rants", rant);
 		return "redirect:/users/profile";
 	 }
-	 private void updatePost(Optional<Post> post, Post postform) {
-		 post.get().setTitle(postform.getTitle());
-		 post.get().setRant(postform.getRant());
+	 private void updateRant(Optional<Rant> rant, Rant rantform) {
+		 rant.get().setRantTitle(rantform.getRantTitle());
+		 rant.get().setRantDesc(rantform.getRantDesc());
 		 
 	 }
 }

@@ -5,30 +5,30 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.rantsroom.model.Post;
+import com.rantsroom.model.Rant;
 
 @Component
-public class PostValidator implements Validator{
+public class RantValidator implements Validator{
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Post.class.equals(clazz);
+		return Rant.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
 		
-		Post post = (Post) target;
+		Rant rant = (Rant) target;
 		
-		//Post title validation
+		//Rant title validation
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title", "error.titleEmpty");
-        if (post.getTitle().length() > 99) {
-            errors.rejectValue("title", "Size.postForm.title");
+        if (rant.getRantTitle().length() > 99) {
+            errors.rejectValue("title", "Size.rantForm.title");
         }
         
-      //Post description validation
+      //Rant description validation
   		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "rant", "error.rantEmpty");
-          if (post.getRant().length() > 999) {
+          if (rant.getRantDesc().length() > 999) {
               errors.rejectValue("rant", "Size.rant.title");
           }                		  
 	}

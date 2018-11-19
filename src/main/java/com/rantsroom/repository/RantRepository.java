@@ -6,14 +6,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rantsroom.model.Post;
+import com.rantsroom.model.Rant;
 import com.rantsroom.model.User;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface RantRepository extends JpaRepository<Rant, Long> {
 	
-	Post findByTitle(String title);
-	List<Post> findByUser(User user);
-	List<Post> findAll();
-	Optional<Post> findById(Long Id);
+	Rant findByRantTitle(String rantTitle);
+	List<Rant> findByUser(User user);
+	List<Rant> findAll();
+	Optional<Rant> findById(Long Id);
 }
