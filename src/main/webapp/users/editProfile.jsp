@@ -159,7 +159,7 @@
 				      	<form:form method="POST" action="/uploadphoto" enctype="multipart/form-data">				      		
 						    <!-- <input type="file" name="profilePhoto" /><br/> -->		      
                             <input type="file" name="profilePhoto"></input><br/>
-						    <input type="submit" value="Submit" />
+						    <input type="submit" value="Submit" class="btn btn-primary rantsubmit"/>
 						</form:form>
 					</div>				      	
 			      </div>

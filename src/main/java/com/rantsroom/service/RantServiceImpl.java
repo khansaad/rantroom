@@ -25,7 +25,7 @@ public class RantServiceImpl extends RantRepositoryImpl implements RantService {
 	}
 
 	@Override
-	public Rant findByTitle(String title) {
+	public Rant findByRantTitle(String title) {
 		
 		return rantRepository.findByRantTitle(title);
 	}

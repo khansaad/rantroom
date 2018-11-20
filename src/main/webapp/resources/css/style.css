@@ -1,18 +1,16 @@
 html{
-	 font-family: 'Montserrat', sans-serif;
-/*
-    -ms-text-size-adjust:100%;
-    -webkit-text-size-adjust:100%
-*/
+	font-family: 'Montserrat', sans-serif;
+	position: relative;
+	min-height: 100%;
+	background-color: #4a4a4a;
+}
+body{
+	margin-bottom: 60px;
 }
 #sub-content{
-/*
-    background:url(../images/bg.jpg);
-    background-repeat: no-repeat;
-    background-size: auto;
-*/
     background-color: #fff;
     height:100%;
+    padding-bottom: 30px;
 }
 #intro{
     color: #3A3A3A;
@@ -23,11 +21,11 @@ html{
 }
 #main{
     background-color: #4a4a4a;
-    z-index: -1;
+    /* z-index: -1; */
 }
 
 #header{
-   border-bottom:1px solid #FFFFFF;
+   border-bottom:1px solid #4a4a4a;
 }
 /*.navbar-default .navbar-collapse, .navbar-default .navbar-form {
     border-color: #eeeeee;
@@ -59,31 +57,6 @@ html{
 }
 .dropdown-menu>li>a:hover{
     background-color: #4a4a4a
-}
-
- .custom-file-input::-webkit-file-upload-button {
-  visibility: hidden;
-}
-.custom-file-input::before {
-  content: 'Select';
-  display: inline-block;
-  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
-  border: 1px solid #999;
-  border-radius: 3px;
-  padding: 5px 8px;
-  outline: none;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  cursor: pointer;
-  text-shadow: 1px 1px #fff;
-  font-weight: 700;
-  font-size: 10pt;
-}
-.custom-file-input:hover::before {
-  border-color: black;
-}
-.custom-file-input:active::before {
-  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
 .navbar{
@@ -164,16 +137,7 @@ html{
 	border-radius: 22px;
 	
 }
-.btnrr{
-    
-    background-color: #5cb85c;
-    border-color: #4cae4c;
-    border-radius: 20px;
-}
-.btnrr:hover{
-   background-color: #5cb85c;
-    border-color: #4cae4c;
-    border-radius: 20px;
+
 }
 .home-links{
     text-align: center;
@@ -259,11 +223,16 @@ h5 {
 }
 /*--//copyright--*/
 #footer {
-    height: 100px;
-    background-color: #000;
-    border-top: 3px solid #3A3A3A;
-    color: #FFFFFF;
-    padding-top: 5px;
+		position: absolute;
+  		bottom: 0;
+  		width: 100%;
+	  /* Set the fixed height of the footer here */
+		height: 100px;
+		background-color: #000;
+		color: #FFFFFF;		
+		border-top: 3px solid #3A3A3A;
+    /* 
+    padding-top: 5px; */
 }
 #footer .social {
     margin-bottom: 10px;

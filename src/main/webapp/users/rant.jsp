@@ -221,15 +221,15 @@
                   <div class="modal-content">					
                     <!-- Modal Header -->
                     <div class="modal-header">
-                      <h5 class="modal-title" style="color: #0F6BBA">Delete Rant</h5>
+                      <h4 class="modal-title" style="color: #0F6BBA">Delete Rant</h4>
                     </div>
 
                     <!-- Modal body -->
                     <div class="modal-body">
                         <p>Are you sure you want to delete this rant?</p>
                         <form:form id="deleteRant" method="POST" action="/deleterant/${rantDesc.getId()}">
-                            <button style="margin-bottom: 12px" type="submit" class="btn btn-success btn-icon"><i class="fa fa-check-square-o"></i> Delete Rant</button>
-	                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button style="margin-bottom: 12px" type="submit" class="btn btn-primary rantsubmit"><i class="fa fa-check-square-o"></i> Delete Rant</button>
+	                        <button type="button" class="btn btn-primary rantsubmit" data-dismiss="modal">Cancel</button>
                         </form:form>
                     </div>
                   </div>

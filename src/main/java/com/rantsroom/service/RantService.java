@@ -10,7 +10,7 @@ import com.rantsroom.model.User;
 public interface RantService {
 	
 	void save (Rant rant);
-	Rant findByTitle(String title);
+	Rant findByRantTitle(String title);
 	List<Rant> findByUser(User user);
 	List<Rant> findAll();
 	Optional<Rant> findById(Long Id);

@@ -1,10 +1,6 @@
 package com.rantsroom.controller;
 
-import java.awt.image.RescaleOp;
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,20 +8,15 @@ import java.nio.file.StandardOpenOption;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,9 +28,7 @@ import com.rantsroom.model.User;
 import com.rantsroom.model.UserProfile;
 import com.rantsroom.service.RantServiceImpl;
 import com.rantsroom.service.UserProfileService;
-import com.rantsroom.service.UserProfileServiceImpl;
 import com.rantsroom.service.UserService;
-import com.rantsroom.validator.FormValidator;
 import com.rantsroom.validator.UserValidator;
 
 @Controller
@@ -159,14 +148,7 @@ public class UserProfileController {
 	@RequestMapping(value = "/users/profile/settings", method = RequestMethod.GET)
 	public String profileSettings(Model model,Principal principal) {
 		
-		String currentUser = null;
-		try {
-			currentUser = principal.getName();
-			logger.info("CURRENT LOGGED-IN USER: ",currentUser);
-		} catch (NullPointerException e) {
-			logger.info("No user logged in");
-		}
-		User user = userService.findByUsername(currentUser);
+		User user = userService.findByUsername(principal.getName());    	
 		model.addAttribute("user", user);
 		model.addAttribute("info", "This part is under construction. Please check back later.");    	
 		

@@ -21,15 +21,15 @@ public class RantValidator implements Validator{
 		Rant rant = (Rant) target;
 		
 		//Rant title validation
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title", "error.titleEmpty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "rantTitle", "error.titleEmpty");
         if (rant.getRantTitle().length() > 99) {
-            errors.rejectValue("title", "Size.rantForm.title");
+            errors.rejectValue("rantTitle", "Size.rantForm.title");
         }
         
       //Rant description validation
-  		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "rant", "error.rantEmpty");
+  		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "rantDesc", "error.rantEmpty");
           if (rant.getRantDesc().length() > 999) {
-              errors.rejectValue("rant", "Size.rant.title");
+              errors.rejectValue("rantDesc", "Size.rant.title");
           }                		  
 	}
 
